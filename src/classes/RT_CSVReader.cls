@@ -86,7 +86,16 @@ public class RT_CSVReader implements Iterable<List<String>>, Iterator<List<Strin
 			}
 			else if (currentValue.endsWith(QUOTE)) {
 				Integer lastIndex = currentValue.length() - 1;
-				tmpValues.add(currentValue.substring(1, lastIndex));
+				currentValue = currentValue.substring(1, lastIndex);
+				
+				//Does it contain double quoted quotes? I.e. Escaped double quotes
+                		Integer doubleQuotedQuotesIndex = currentValue.indexOf(DOUBLE_QUOTE);
+                		if(doubleQuotedQuotesIndex >= 0) {
+                    			// Replace double quoted quotes with double quotes.
+                    			currentValue = currentValue.replace(DOUBLE_QUOTE, QUOTE);
+                		}
+				
+				tmpValues.add(currentValue);
 				if (foundAt == nlAt) {
 					break;
 				}
